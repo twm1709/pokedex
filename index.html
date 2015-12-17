@@ -28,7 +28,8 @@
 							<p>Type 1: {{selectedPk.types[0].name | uppercase}}</p>
 							<p>Type 2: {{selectedPk.types[1].name | uppercase}}</p>
 							<!-- LINEA EVOLUTIVA -->
-							<button ng-click="searchNew()">SEARCH</button>
+							
+							<button ng-click="searchNew()">SEARCH NEW</button>
 
 							<!--
 							<button ng-click="importarDatos()">IMPORTAR DATOS</button>{{progress}}%
@@ -51,7 +52,7 @@
 							</ul>
 						</div>
 					</div>
-					<div class="row">
+					<div class="row" ng-hide="selectedPk">
 						<div class="col-md-6">
 							<!-- AREA DE NAVEGACION, NOMBRE, TIPOS, DESPLAZAMIENTO -->
 							<form name="searchForm" ng-submit= "findPokemon()">
