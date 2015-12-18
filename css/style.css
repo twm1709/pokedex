@@ -1,5 +1,19 @@
 body {
 	font-family: 'Lato', sans-serif;
-	color: #747704;
 	font-weight: 300;
+}
+
+.row{
+	display:flex;
+	flex-wrap:wrap;
+	max-height: 480px;
+	
+}
+.container{
+	max-width: 640px;
+}
+.scroll_list{
+	overflow:auto;
+	max-height:200px;
+	width:280px;
 }

@@ -1,8 +1,9 @@
 (function(){
-	var app = angular.module('app', ['ngRoute', 'dex-services']);
-	app.controller('PokedexController', function($scope, $http, $interval, url, pklist, types){
+	var app = angular.module('app', ['ngRoute', 'dex-services', 'dex-filters']);
+	app.controller('PokedexController', function($scope, $http, $interval, url, pklist, types, searchService){
 		$scope.types = types;
 		$interval(callAtInterval, 1000);
+		$scope.tab = 0;
 		function callAtInterval(){
 			$scope.progress = pklist.getCount() / 718 * 100;
 		}
@@ -26,12 +27,14 @@
 		$scope.loadPk = function(value){
 			$scope.selectedImg ='img/searching.gif';
 			$scope.selectedPk = pklist.getPkData(value);
+			$scope.tab = 1;
 			getPkSprite();
 			
 		};
 
 		$scope.searchNew = function(){
 			$scope.selectedPk = false;
+			$scope.tab = 0;
 		};
 
 		var getPkSprite = function(){
@@ -40,10 +43,24 @@
 		};
 
 		//List Filters
-		$scope.filterByName = function(){};
 		$scope.filterByType = function(){};
 		$scope.filterByNumber = function(){};
 
+		$scope.searchName = '';
+		$scope.searchAttack = '';
+		$scope.searchAbility = '';
+		$scope.searchType1 = '';
+		$scope.searchType2 = '';
+
+		$scope.filterPokemon = function(){
+			searchService.name = $scope.searchName;
+			searchService.move = $scope.searchAttack;
+			searchService.ability = $scope.searchAbility;
+			searchService.type1 = $scope.searchType1;
+			searchService.type2 = $scope.searchType2;
+
+			
+		};
 		/*
 		$scope.importarDatos = function(){
 			for (i = 1; i <= 718; i++){

@@ -10,6 +10,7 @@
     	<script src="js/angular.min.js"></script>
     	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.2/angular-route.js"></script>
     	<script src="js/services.js"></script>
+    	<script src="js/filters.js"></script>
     	<script src="js/app.js"></script>
 	</head>
 	<body ng-controller="PokedexController">
@@ -43,8 +44,8 @@
 						<div class="col-md-6">
 							<!-- LISTA DE POKEMON -->
 							<p> Find Pokemon </p>
-							<ul>
-								<li ng-repeat="pk in pkList | orderBy:'national_id' | limitTo:12 | filter: filterByname() | filter: filterByType() | filter: filterByNumber()">
+							<ul class="scroll_list">
+								<li ng-repeat="pk in pkList | filterByParameters  | orderBy:'national_id'">
 									<a href="" ng-click="loadPk(pk.national_id)">
 										{{pk.national_id}} - {{ pk.name }}
 									</a>
@@ -55,21 +56,27 @@
 					<div class="row" ng-hide="selectedPk">
 						<div class="col-md-6">
 							<!-- AREA DE NAVEGACION, NOMBRE, TIPOS, DESPLAZAMIENTO -->
-							<form name="searchForm" ng-submit= "findPokemon()">
+							<form name="searchForm" ng-submit= "filterPokemon()">
 								<p> Search Pokedex: </p>
 								<p> Name : <input type="text" ng-model="searchName"/> </p>
+								<p> 
+									Has Attack:<input type="text" ng-model="searchAttack"/>
+								</p>
+								<p> 
+									Has Ability:<input type="text" ng-model="searchAbility"/> 
+								</p>
 								<p> Type 1: 
-									<select name="type1">
+									<select name="type1" ng-model="searchType1">
 										<option value = ''> ------ </option>
-										<option  ng-repeat="t in types" value="t.name">
+										<option  ng-repeat="t in types" value="{{t.name}}">
 											{{t.name}}
 										</option>
 									</select> 
 								</p>
 								<p> Type 2: 
-									<select name="type2">
+									<select name="type2" ng-model="searchType2">
 										<option value = ''> ------ </option>
-										<option ng-repeat="t in types" value="t.name">
+										<option ng-repeat="t in types" value="{{t.name}}">
 											{{t.name}}
 										</option>
 									</select> 
@@ -84,10 +91,10 @@
 				<div class="col-md-6">
 					<!-- INFO ESPECIFICA -->
 					<!-- STATS -->
-					<div class="row">
+					<div class="row" ng-show="tab != 0">
 						<div class="col-md-6">
-							<p> Stats </p>
-							<ul>
+							<p> Stats <button ng-click="tab = 1">VIEW</button></p>
+							<ul ng-show="tab == 1">
 								<li> HP: {{selectedPk.hp}} </li>
 								<li> Attack: {{selectedPk.attack}} </li>
 								<li> Defense: {{selectedPk.defense}} </li>
@@ -99,21 +106,21 @@
 						</div>
 					</div>
 					<!-- HAB -->
-					<div class="row">
+					<div class="row" ng-show="tab != 0">
 						<div class="col-md-6">
-							<p> Abilities </p>
-							<ul>
+							<p> Abilities <button ng-click="tab = 2">VIEW</button></p>
+							<ul ng-show="tab == 2">
 								<li ng-repeat="a in selectedPk.abilities | orderBy:name:reverse"> {{a.name}}</li>
 							</ul>
 						</div>
 					</div>
 
 					<!-- ATAQUES -->
-					<div class="row">
+					<div class="row" ng-show="tab != 0">
 						<div class="col-md-6">
-							<p> Moves </p>
-							<ul>
-								<li ng-repeat="move in selectedPk.moves | orderBy:name:reverse"> {{move.name}}({{move.learn_type}}) </li>
+							<p> Moves <button ng-click="tab = 3">VIEW</button></p>
+							<ul ng-show="tab == 3" class="scroll_list">
+								<li ng-repeat="move in selectedPk.moves | orderBy:'learn_type'| orderBy:'name'"> {{move.name}}({{move.learn_type}}) </li>
 							</ul>
 						</div>
 					</div>
